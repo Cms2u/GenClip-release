@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <title>GenClip – ตั้งค่า</title>
+  <link rel="stylesheet" href="../sidepanel/sidepanel.css">
+  <style>
+    body { max-width: 860px; margin: 0 auto; padding: 20px; }
+    textarea { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  </style>
+</head>
+<body>
+  <header><h1>GenClip – ตั้งค่า</h1></header>
+
+  <section class="card">
+    <h2>Prompt วางแผนคลิป (ส่งให้ ChatGPT พร้อมรูปสินค้า)</h2>
+    <p class="hint">ตัวแปรที่ใช้ได้: {{name}} {{type}} {{details}} {{style}} {{scenes}} ต้องให้ ChatGPT ตอบเป็น JSON ที่มี scenes[].image_prompt / video_prompt / script_th</p>
+    <textarea id="planTemplate" rows="18"></textarea>
+  </section>
+
+  <section class="card">
+    <h2>ความเป็นมนุษย์ของผู้นำเสนอ</h2>
+    <p class="hint">ต่อท้ายคำสั่งวางแผนทุกครั้ง (พร้อมสไตล์คลิปและบทที่ห้ามซ้ำ) แก้ให้เข้ากับร้านได้</p>
+    <textarea id="humanGuide" rows="7"></textarea>
+  </section>
+
+  <section class="card">
+    <h2>Prompt สร้างภาพแต่ละฉาก</h2>
+    <p class="hint">ตัวแปรที่ใช้ได้: {{index}} {{total}} {{image_prompt}}</p>
+    <textarea id="imageTemplate" rows="5"></textarea>
+  </section>
+
+  <section class="card">
+    <h2>เวลารอ ChatGPT</h2>
+    <p class="hint">โมเดลแบบคิดนาน (Thinking) อาจใช้หลายนาที ถ้าใช้โมเดลเร็วลดเวลาลงได้</p>
+    <div class="grid">
+      <label>รอแผนคลิปสูงสุด (วินาที)<input id="planTimeoutSec" type="number" min="60"></label>
+      <label>รอสร้างภาพสูงสุด (วินาที)<input id="imageTimeoutSec" type="number" min="60"></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>ตัวหนังสือในคลิป (แบบโฆษณามืออาชีพ)</h2>
+    <label>หัวข้อภาษาไทยในภาพ (ChatGPT วาดลงในภาพแบบโปสเตอร์ แล้ว Flow ทำให้ขยับเบา ๆ)
+      <select id="textInImage">
+        <option value="all">ใส่ทุกสไตล์คลิป</option>
+        <option value="adpro">เฉพาะสไตล์ "โฆษณามืออาชีพ"</option>
+        <option value="off">ไม่ใส่</option>
+      </select>
+    </label>
+    <label>ตัวหนังสือที่ระบบเขียนทับตอนรวมคลิป (ราคา โปร ปุ่มสั่งซื้อ ชื่อเว็บ สะกดถูกแน่นอน)
+      <select id="textOverlay">
+        <option value="on">ใส่</option>
+        <option value="off">ไม่ใส่</option>
+      </select>
+    </label>
+    <label>ปุ่มชวนสั่งซื้อ (ฉากสุดท้าย เว้นว่าง = ไม่ใส่)
+      <input id="ctaText" placeholder="🛒 กดตะกร้าสั่งซื้อได้เลย">
+    </label>
+    <label>ชื่อเว็บใต้ปุ่ม (เว้นว่าง = ไม่ใส่)
+      <input id="shopUrlText" placeholder="nichapainnovation.co.th">
+    </label>
+    <p class="hint">ราคาและโปรโมชันกรอกในฟอร์มเพิ่มสินค้า (ราคาว่าง = ดึงจาก "ราคา ... บาท" ในรายละเอียด) คลิปที่ไม่ได้ใส่หัวข้อในภาพ ระบบจะเขียนหัวข้อทับให้แทน</p>
+  </section>
+
+  <section class="card">
+    <h2>ชุดคู่จากเว็บร้าน</h2>
+    <label>เลือกชุดคู่ให้ผู้นำเสนอ (เสื้อ → หาผ้าถุง/กระโปรงคู่, ผ้าถุง/กระโปรง → หาเสื้อคู่)
+      <select id="companionMode">
+        <option value="auto">อัตโนมัติ: ให้ ChatGPT เลือกแบบและสีที่เข้ากันจากสินค้าที่มีของในเว็บ</option>
+        <option value="off">ไม่ใช้</option>
+      </select>
+    </label>
+    <label>เว็บร้าน
+      <input id="companionSite" placeholder="https://nichapainnovation.co.th">
+    </label>
+    <p class="hint">ดึงรายการสินค้าที่มีของจากเว็บ (เก็บไว้ 6 ชั่วโมง) แล้วแนบรูปชุดคู่สีที่เลือกตอนสร้างภาพทุกฉาก</p>
+  </section>
+
+  <section class="card">
+    <h2>วิดีโอ (Flow)</h2>
+    <label>ข้อความนำหน้า video prompt ทุกฉาก
+      <input id="videoPrefix">
+    </label>
+    <label>ข้อความต่อท้าย video prompt ทุกฉาก
+      <input id="videoSuffix" placeholder="เช่น Photorealistic, soft studio lighting, no subtitles.">
+    </label>
+    <label>ความละเอียดคลิปที่รวมแล้ว
+      <select id="mergeResolution">
+        <option value="1080">1080p Full HD (1080x1920) แนะนำสำหรับ TikTok/Facebook</option>
+        <option value="1440">1440p (1440x2560) ไฟล์ใหญ่ขึ้น</option>
+        <option value="0">เท่าคลิปต้นฉบับ (720p)</option>
+      </select>
+    </label>
+    <label>ความเร็วคลิปตอนรวม (เสียงไม่แหลม คลิปจะสั้นลงตามสัดส่วน)
+      <select id="clipSpeed">
+        <option value="1">1 เท่า (ปกติ)</option>
+        <option value="1.1">1.1 เท่า</option>
+        <option value="1.15">1.15 เท่า</option>
+        <option value="1.25">1.25 เท่า</option>
+        <option value="1.5">1.5 เท่า</option>
+      </select>
+    </label>
+    <label>ชื่อโฟลเดอร์ย่อยเก็บคลิปที่รวมแล้ว
+      <input id="finalFolder" placeholder="ClipFinal">
+    </label>
+    <label>ชื่อโฟลเดอร์ย่อยเก็บภาพ (แยกโฟลเดอร์ตามชื่อสินค้าให้เอง)
+      <input id="picFolder" placeholder="GenPic">
+    </label>
+    <p class="hint">โฟลเดอร์ย่อยจะอยู่ในโฟลเดอร์หลักที่เลือกด้วยปุ่ม 📁 ใน side panel (เช่น D:\ClipGen) ถ้ายังไม่ได้เลือก จะอยู่ใน Downloads</p>
+    <label>เมื่อ Flow สร้างวิดีโอไม่สำเร็จ (ล้มเหลว)
+      <select id="flowRetries">
+        <option value="0">ข้ามไปฉากถัดไปเลย</option>
+        <option value="1">ส่งใหม่อัตโนมัติ 1 ครั้ง</option>
+        <option value="2">ส่งใหม่อัตโนมัติ 2 ครั้ง</option>
+        <option value="3">ส่งใหม่อัตโนมัติ 3 ครั้ง</option>
+      </select>
+    </label>
+    <label>โมเดลสร้างวิดีโอ
+      <select id="flowModel">
+        <option value="fast">Veo 3.1 - Fast (เร็ว ใช้เครดิตน้อย ได้คิวง่ายช่วงคนใช้เยอะ)</option>
+        <option value="quality">Veo 3.1 - Quality (คมชัดกว่า ใช้เครดิตมากกว่า)</option>
+        <option value="">ไม่เปลี่ยน (ใช้ตามที่ตั้งไว้ใน Flow)</option>
+      </select>
+    </label>
+    <label>เมื่อ Flow ขออนุมัติใช้เครดิต
+      <select id="flowApproveMode">
+        <option value="always">กด "อนุมัติเสมอ" ให้อัตโนมัติ (Flow จะไม่ถามอีก)</option>
+        <option value="once">กด "อนุมัติ" ทีละครั้ง</option>
+      </select>
+    </label>
+    <div class="grid">
+      <label>รอวิดีโอสูงสุด (วินาที)<input id="videoTimeoutSec" type="number" min="60"></label>
+      <label>พักระหว่างฉาก (วินาที)<input id="sceneDelaySec" type="number" min="0"></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>โพสต์ TikTok</h2>
+    <label>หลังรวมคลิปเสร็จ
+      <select id="autoTikTok">
+        <option value="on">เปิดหน้าอัปโหลด TikTok ให้เอง (แนบคลิป ใส่แคปชัน เปิดป้าย AI แล้วกดโพสต์เอง)</option>
+        <option value="off">ไม่ต้องเปิด (กด 📤 ในคิวเมื่อต้องการ)</option>
+      </select>
+    </label>
+    <label>กดโพสต์
+      <select id="autoPostTikTok">
+        <option value="on">กดโพสต์ให้อัตโนมัติ เมื่อแคปชัน ป้าย AI และตะกร้าผ่านครบ</option>
+        <option value="off">ไม่กดเอง (หยุดให้ตรวจคลิปแล้วกดโพสต์เอง)</option>
+      </select>
+    </label>
+    <label>เวลาโพสต์
+      <select id="postTiming">
+        <option value="now">โพสต์ทันที</option>
+        <option value="fixed">ตั้งเวลา: ช่วงเวลาที่ว่างถัดไปจากรายการด้านล่าง</option>
+        <option value="random">ตั้งเวลา: สุ่มเวลาในช่วงที่กำหนด</option>
+        <option value="interval">เว้นระยะแบบคนโพสต์เอง: คลิปล่าสุด + สุ่มนาที (ถึงเวลาแล้วโพสต์ทันที)</option>
+      </select>
+    </label>
+    <label>ช่วงเวลาโพสต์ (โหมดตั้งเวลาตามรายการ คั่นด้วยจุลภาค)
+      <input id="postFixedTimes" placeholder="11:30, 19:00">
+    </label>
+    <div class="grid">
+      <label>ช่วงเวลาที่โพสต์ได้ ตั้งแต่ (โหมดสุ่ม/เว้นระยะ)<input id="postRandomStart" placeholder="10:00"></label>
+      <label>ถึง<input id="postRandomEnd" placeholder="21:00"></label>
+    </div>
+    <div class="grid">
+      <label>เว้นระยะจากคลิปล่าสุด ต่ำสุด (นาที)<input id="postIntervalMin" type="number" min="1"></label>
+      <label>สูงสุด (นาที)<input id="postIntervalMax" type="number" min="1"></label>
+    </div>
+    <label>เว้นระยะระหว่างคลิปอย่างน้อย (นาที)<input id="postMinGapMin" type="number" min="0"></label>
+    <p class="hint">TikTok ตั้งเวลาได้ล่วงหน้าอย่างน้อยประมาณ 15 นาที ไม่เกิน 10 วัน ถ้าตั้งเวลาในหน้า TikTok ไม่สำเร็จ ระบบจะไม่โพสต์ทันทีแทน แต่หยุดให้ตั้งเวลาเอง</p>
+    <p class="hint">โพสต์อัตโนมัติจะโพสต์ทันทีโดยไม่ให้ตรวจคลิปก่อน ถ้าขั้นไหนไม่ผ่าน ระบบจะหยุดให้คุณตรวจเอง</p>
+  </section>
+
+  <section class="card">
+    <h2>โพสต์ Reels ลงเพจ Facebook</h2>
+    <label>หลังโพสต์ TikTok
+      <select id="autoFacebook">
+        <option value="on">เปิดหน้าสร้างรีลใน Business Suite ให้เอง (แนบคลิป ใส่คำอธิบาย ตั้งเวลา)</option>
+        <option value="off">ไม่ต้องเปิด (กด 📘 ในคิวเมื่อต้องการ)</option>
+      </select>
+    </label>
+    <label>กดแชร์
+      <select id="autoPostFacebook">
+        <option value="on">กดแชร์/กำหนดเวลาให้อัตโนมัติ เมื่อทุกขั้นผ่านครบ</option>
+        <option value="off">ไม่กดเอง (หยุดให้ตรวจแล้วกดแชร์เอง)</option>
+      </select>
+    </label>
+    <label>ลิงก์หน้าสร้างรีลของเพจ (เปิด Business Suite → เลือกเพจ → สร้างรีล แล้วคัดลอกลิงก์มาวาง)
+      <input id="fbComposerUrl" placeholder="https://business.facebook.com/latest/reels_composer?asset_id=...">
+    </label>
+    <label>เวลาโพสต์ลงเพจ (แยกจาก TikTok)
+      <select id="fbPostTiming">
+        <option value="random">ตั้งเวลา: สุ่มเวลาในช่วงที่กำหนด</option>
+        <option value="interval">เว้นระยะแบบคนโพสต์เอง: รีลล่าสุด + สุ่มนาที (ถึงเวลาแล้วแชร์ทันที)</option>
+        <option value="fixed">ตั้งเวลา: ช่วงเวลาที่ว่างถัดไปจากรายการด้านล่าง</option>
+        <option value="now">แชร์ทันที</option>
+      </select>
+    </label>
+    <label>ช่วงเวลาโพสต์ (โหมดตั้งเวลาตามรายการ)
+      <input id="fbFixedTimes" placeholder="12:00, 20:00">
+    </label>
+    <div class="grid">
+      <label>ช่วงเวลาที่โพสต์ได้ ตั้งแต่<input id="fbRandomStart" placeholder="10:00"></label>
+      <label>ถึง<input id="fbRandomEnd" placeholder="21:00"></label>
+    </div>
+    <div class="grid">
+      <label>เว้นระยะจากรีลล่าสุด ต่ำสุด (นาที)<input id="fbIntervalMin" type="number" min="1"></label>
+      <label>สูงสุด (นาที)<input id="fbIntervalMax" type="number" min="1"></label>
+    </div>
+    <label>เว้นระยะระหว่างรีลอย่างน้อย (นาที)<input id="fbMinGapMin" type="number" min="0"></label>
+    <p class="hint">ต้องล็อกอิน Facebook ที่เป็นแอดมินเพจในเบราว์เซอร์นี้ก่อน ระบบใช้แคปชันและแฮชแท็กเดียวกับ TikTok แต่สุ่มเวลาโพสต์แยกกัน</p>
+  </section>
+
+  <section class="card">
+    <h2>Selector สำรอง (สำหรับเมื่อหน้าเว็บเปลี่ยน)</h2>
+    <p class="hint">ใส่เป็น JSON เพื่อแทนค่าตั้งต้น เช่น {"chatgpt": {"sendButton": ["button#send"]}, "flow": {"promptBox": ["textarea"]}}</p>
+    <textarea id="selectors" rows="6"></textarea>
+  </section>
+
+  <div class="row">
+    <button id="saveBtn" class="primary">บันทึก</button>
+    <button id="resetBtn">คืนค่าตั้งต้น</button>
+  </div>
+  <p id="msg" class="hint"></p>
+
+  <script src="../lib/prompts.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

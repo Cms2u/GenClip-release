@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <title>GenClip</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <h1>GenClip <small id="ver" class="hint"></small></h1>
+    <a id="openOptions" href="#">ตั้งค่า</a>
+  </header>
+  <div id="updateBar" class="card update" hidden>
+    <span id="updateText"></span>
+    <button id="reloadBtn" class="primary">รีโหลด GenClip</button>
+  </div>
+
+  <section class="card">
+    <h2>เพิ่มสินค้า</h2>
+    <button id="importBtn" class="full">ดึงสินค้าจากแท็บ TikTok ที่เปิดอยู่</button>
+    <p class="hint" id="importHint">เปิดหน้าแก้ไขสินค้าใน Seller Center หรือหน้าสินค้าในร้าน แล้วกดปุ่มนี้</p>
+    <label>ชื่อสินค้า
+      <input id="pName" placeholder="เช่น ผ้าถุงลายบาติก สีกรม">
+    </label>
+    <label>ประเภท
+      <select id="pType">
+        <option>เสื้อ</option>
+        <option>ผ้าถุง</option>
+        <option>ชุดเซ็ต</option>
+        <option>อื่นๆ</option>
+      </select>
+    </label>
+    <label>รายละเอียด / ราคา / โปรโมชัน
+      <textarea id="pDetails" rows="3" placeholder="ผ้าฝ้าย ใส่สบาย ฟรีไซซ์ เอว 28-40 นิ้ว ราคา 199 บาท ซื้อ 3 แถม 1"></textarea>
+    </label>
+    <div class="row2">
+      <label>ราคา (ขึ้นในคลิป)
+        <input id="pPrice" placeholder="เช่น 1590">
+      </label>
+      <label>โปรโมชัน (ขึ้นในคลิป)
+        <input id="pPromo" placeholder="เช่น ลดทันที 10%">
+      </label>
+    </div>
+    <label>สไตล์ผู้นำเสนอ / ฉาก (ไม่บังคับ)
+      <input id="pStyle" placeholder="เช่น แม่ค้าวัย 30 ยิ้มแย้ม ร้านผ้าบรรยากาศอบอุ่น">
+    </label>
+    <label>สไตล์คลิป
+      <select id="pClipStyle"></select>
+    </label>
+    <label>รหัสสินค้า TikTok Shop (สำหรับปักตะกร้าตอนโพสต์ ไม่บังคับ)
+      <input id="pProductId" inputmode="numeric" placeholder="ดึงจาก Seller Center จะได้เอง ถ้าว่างจะค้นจากชื่อสินค้า">
+    </label>
+    <label>จำนวนฉาก (ฉากละประมาณ 8 วินาที)
+      <input id="pScenes" type="number" min="1" max="8" value="3">
+    </label>
+    <label>รูปสินค้าจริง (เพิ่มจากเครื่องได้)
+      <input id="pImages" type="file" accept="image/*" multiple>
+    </label>
+    <p class="hint">คลิกรูปเพื่อเลือก/ไม่เลือก ใช้ได้สูงสุด 10 รูป เลือกรูปที่เห็นลายผ้าชัด ไม่มีตัวหนังสือ (หลายมุม หลายสีได้)</p>
+    <div id="preview" class="thumbs"></div>
+    <button id="addBtn">เพิ่มเข้าคิว</button>
+  </section>
+
+  <section class="card">
+    <h2>คิวงาน</h2>
+    <ul id="queue"></ul>
+    <label class="check"><input type="checkbox" id="skipVideo"> สร้างแค่ภาพกับ prompt (ไม่ส่งไป Flow)</label>
+    <div class="row">
+      <button id="startBtn" class="primary">เริ่มทำงาน</button>
+      <button id="stopBtn" disabled>หยุด</button>
+    </div>
+    <p class="hint">ต้องเปิดแผงนี้ค้างไว้ระหว่างทำงาน ไฟล์จะถูกบันทึกที่ Downloads/GenClip/</p>
+    <div class="row" style="margin-top:8px">
+      <button id="pickFolderBtn" title="ระบบจะสร้าง ClipFinal และ GenPic\ชื่อสินค้า ในโฟลเดอร์นี้ให้เอง">📁 เลือกโฟลเดอร์หลัก (เช่น D:\ClipGen)</button>
+    </div>
+    <p class="hint" id="folderHint"></p>
+    <button id="mergeBtn" class="full" style="margin-top:8px">รวมคลิปเป็นไฟล์เดียว (เลือกไฟล์ scene-XX.mp4)</button>
+    <input id="mergeFiles" type="file" accept="video/*" multiple hidden>
+  </section>
+
+  <section class="card">
+    <h2>บันทึกการทำงาน</h2>
+    <div id="log"></div>
+    <div class="row" style="margin-top:8px">
+      <button id="inspectBtn">ตรวจหน้าเว็บ (คัดลอกส่งผู้พัฒนา)</button>
+      <button id="clearLogBtn">ล้าง</button>
+    </div>
+  </section>
+
+  <script src="../lib/prompts.js"></script>
+  <script src="../lib/overlay.js"></script>
+  <script src="../lib/merge.js"></script>
+  <script src="../lib/clipstore.js"></script>
+  <script src="../lib/folder.js"></script>
+  <script src="../lib/catalog.js"></script>
+  <script src="../lib/updater.js"></script>
+  <script src="sidepanel.js"></script>
+  <script src="tiktok.js"></script>
+</body>
+</html>

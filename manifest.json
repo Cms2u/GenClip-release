@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "GenClip – คลิปขายเสื้อผ้าอัตโนมัติ",
+  "version": "0.9.4",
+  "description": "ใช้ ChatGPT สร้างภาพ + prompt แล้วส่งไปสร้างวิดีโอใน Google Flow อัตโนมัติ สำหรับคลิปขายเสื้อ ผ้าถุง",
+  "permissions": ["sidePanel", "storage", "unlimitedStorage", "downloads", "tabs", "scripting", "debugger"],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://*.oaiusercontent.com/*",
+    "https://labs.google/*",
+    "https://flow.google.com/*",
+    "https://*.googleusercontent.com/*",
+    "https://storage.googleapis.com/*",
+    "file:///*",
+    "https://*.tiktok.com/*",
+    "https://*.ibyteimg.com/*",
+    "https://*.byteimg.com/*",
+    "https://*.tiktokcdn.com/*",
+    "https://*.ttwstatic.com/*",
+    "https://business.facebook.com/*",
+    "https://*.facebook.com/*",
+    "https://*.fbcdn.net/*",
+    "https://raw.githubusercontent.com/*",
+    "https://nichapainnovation.co.th/*",
+    "https://www.nichapainnovation.co.th/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "GenClip" },
+  "side_panel": { "default_path": "sidepanel/sidepanel.html" },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["content/common.js", "content/chatgpt.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://flow.google.com/*", "https://labs.google/*"],
+      "js": ["content/common.js", "content/flow.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

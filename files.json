@@ -1,0 +1,117 @@
+{
+ "version": "0.9.4",
+ "files": [
+  {
+   "path": "assets/fonts/Kanit-Bold.ttf",
+   "size": 176136
+  },
+  {
+   "path": "assets/fonts/OFL.txt",
+   "size": 4476
+  },
+  {
+   "path": "background.js",
+   "size": 373
+  },
+  {
+   "path": "content/chatgpt.js",
+   "size": 20495
+  },
+  {
+   "path": "content/common.js",
+   "size": 11398
+  },
+  {
+   "path": "content/fb-post.js",
+   "size": 22582
+  },
+  {
+   "path": "content/flow.js",
+   "size": 57197
+  },
+  {
+   "path": "content/tiktok-post.js",
+   "size": 47361
+  },
+  {
+   "path": "lib/catalog.js",
+   "size": 5441
+  },
+  {
+   "path": "lib/clipstore.js",
+   "size": 1322
+  },
+  {
+   "path": "lib/folder.js",
+   "size": 3733
+  },
+  {
+   "path": "lib/merge.js",
+   "size": 5729
+  },
+  {
+   "path": "lib/overlay.js",
+   "size": 8078
+  },
+  {
+   "path": "lib/prompts.js",
+   "size": 32135
+  },
+  {
+   "path": "lib/updater.js",
+   "size": 6791
+  },
+  {
+   "path": "manifest.json",
+   "size": 1703
+  },
+  {
+   "path": "options/options.html",
+   "size": 16681
+  },
+  {
+   "path": "options/options.js",
+   "size": 2080
+  },
+  {
+   "path": "README.md",
+   "size": 20058
+  },
+  {
+   "path": "sidepanel/sidepanel.css",
+   "size": 3627
+  },
+  {
+   "path": "sidepanel/sidepanel.html",
+   "size": 5522
+  },
+  {
+   "path": "sidepanel/sidepanel.js",
+   "size": 105568
+  },
+  {
+   "path": "sidepanel/tiktok.js",
+   "size": 7104
+  },
+  {
+   "path": "tools/auto-update.vbs",
+   "size": 459
+  },
+  {
+   "path": "tools/concat.ps1",
+   "size": 1608
+  },
+  {
+   "path": "tools/release.sh",
+   "size": 3029
+  },
+  {
+   "path": "tools/setup-team.bat",
+   "size": 3493
+  },
+  {
+   "path": "tools/update-now.bat",
+   "size": 739
+  }
+ ]
+}
